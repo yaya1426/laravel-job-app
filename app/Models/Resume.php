@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Concerns\HasUuids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Support\Facades\Storage;
 
 class Resume extends Model
 {
@@ -60,6 +61,16 @@ class Resume extends Model
         'createdAt',
         'updatedAt',
     ];
+
+    /**
+     * Get the URL for the resume file.
+     *
+     * @return string
+     */
+    public function getFileUrlAttribute()
+    {
+        return Storage::disk('public')->url($this->fileUri);
+    }
 
     /**
      * Relationship: A resume belongs to a user.
