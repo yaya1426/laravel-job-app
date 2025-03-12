@@ -1,3 +1,7 @@
+@php
+    use Illuminate\Support\Facades\Storage;
+@endphp
+
 <x-app-layout>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-white leading-tight">
@@ -44,7 +48,7 @@
                                     <div class="flex items-center gap-2 text-white/70">
                                         <i class="fas fa-file-alt"></i>
                                         <span>Applied with: {{ $application->resume->filename }}</span>
-                                        <a href="{{ asset('storage/' . $application->resume->fileUri) }}" 
+                                        <a href="{{ Storage::disk('cloud')->url($application->resume->fileUri) }}" 
                                            target="_blank"
                                            class="text-blue-400 hover:underline ml-2">
                                             View Resume
