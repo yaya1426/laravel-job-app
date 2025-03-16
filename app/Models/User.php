@@ -39,6 +39,7 @@ class User extends Authenticatable
         'email',
         'password',
         'role',
+        'last_login_at',
     ];
 
     protected $dates = ['deleted_at'];
@@ -64,6 +65,7 @@ class User extends Authenticatable
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'last_login_at' => 'datetime',
         ];
     }
     public function resumes(): HasMany
