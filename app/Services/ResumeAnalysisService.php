@@ -17,41 +17,51 @@ class ResumeAnalysisService
         try {
             // Create a temporary file to store the PDF
             $tempFile = tempnam(sys_get_temp_dir(), 'resume_');
-            
+
             // If it's a full URL, get the path part
             $filePath = parse_url($fileUrl, PHP_URL_PATH);
             if (!$filePath) {
                 throw new \Exception("Invalid file URL: {$fileUrl}");
             }
-            
+
             // Extract the filename from the path
             $filename = basename($filePath);
-            
+
             // Construct the storage path - assuming files are stored in the resumes directory
             $storagePath = "resumes/{$filename}";
-            
+
             Log::debug("Attempting to read file from cloud storage: {$storagePath}");
-            
+
             // Check if file exists in cloud storage
             if (!Storage::disk('cloud')->exists($storagePath)) {
                 throw new \Exception("File does not exist in cloud storage: {$storagePath}");
             }
-            
+
             // Download the file from cloud storage to temp location
             $pdfContent = Storage::disk('cloud')->get($storagePath);
             if (!$pdfContent) {
                 throw new \Exception("Could not read PDF content from storage: {$storagePath}");
             }
-            
+
             Log::debug("Successfully downloaded PDF content, size: " . strlen($pdfContent) . " bytes");
-            
+
             file_put_contents($tempFile, $pdfContent);
-            
-            // Ensure pdftotext is installed
-            if (!file_exists('/usr/bin/pdftotext')) {
-                throw new \Exception("pdftotext utility is not installed. Please run: sudo apt-get install poppler-utils");
+
+            // Check if pdftotext is available in the system
+            $pdftotext_paths = ['/opt/homebrew/bin/pdftotext', '/usr/bin/pdftotext', '/usr/local/bin/pdftotext'];
+            $pdftotext_available = false;
+
+            foreach ($pdftotext_paths as $path) {
+                if (file_exists($path)) {
+                    $pdftotext_available = true;
+                    break;
+                }
             }
-            
+
+            if (!$pdftotext_available) {
+                throw new \Exception("pdftotext utility is not installed. For macOS, run: brew install poppler. For Linux, run: sudo apt-get install poppler-utils");
+            }
+
             // Extract text from PDF
             $text = (new Pdf())
                 ->setPdf($tempFile)
@@ -68,13 +78,13 @@ class ResumeAnalysisService
 
             Log::debug("Successfully extracted text from PDF, length: " . strlen($text) . " characters");
             return $text;
-            
+
         } catch (\Exception $e) {
             // Clean up temp file if it exists
             if (isset($tempFile) && file_exists($tempFile)) {
                 unlink($tempFile);
             }
-            
+
             Log::error('PDF text extraction failed: ' . $e->getMessage());
             Log::debug('File URL: ' . $fileUrl);
             if (isset($storagePath)) {
