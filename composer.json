@@ -8,7 +8,7 @@
     "require": {
         "php": "^8.2",
         "aws/aws-sdk-php": "^3.342",
-        "laravel/framework": "^11.31",
+        "laravel/framework": "^12.0",
         "laravel/tinker": "^2.9",
         "league/flysystem-aws-s3-v3": "^3.29",
         "openai-php/laravel": "^0.11.0",

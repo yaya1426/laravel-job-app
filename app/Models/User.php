@@ -42,8 +42,6 @@ class User extends Authenticatable
         'last_login_at',
     ];
 
-    protected $dates = ['deleted_at'];
-
     /**
      * The attributes that should be hidden for serialization.
      *
@@ -53,7 +51,6 @@ class User extends Authenticatable
         'password',
         'remember_token',
     ];
-
 
     /**
      * Get the attributes that should be cast.
@@ -66,6 +63,7 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
             'last_login_at' => 'datetime',
+            'deleted_at' => 'datetime',
         ];
     }
     public function resumes(): HasMany
