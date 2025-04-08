@@ -14,9 +14,9 @@ class DashboardController extends Controller
             ->whereDoesntHave('jobApplications', function($query) {
                 $query->where('userId', auth()->id());
             });
-        
+
         // Apply job type filter
-        if ($request->has('filter') && in_array($request->filter, ['full-time', 'part-time', 'remote'])) {
+        if ($request->has('filter') && in_array($request->filter, ['full-time', 'remote', 'hybrid', 'contract'])) {
             $query->where('type', $request->filter);
         }
 

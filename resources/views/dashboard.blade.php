@@ -17,8 +17,8 @@
                 <div class="flex flex-col md:flex-row justify-between items-center gap-4 mb-6">
                     <!-- Search Bar -->
                     <form action="{{ route('dashboard') }}" method="GET" class="w-full md:w-1/3">
-                        <input type="text" 
-                            name="search" 
+                        <input type="text"
+                            name="search"
                             placeholder="Search jobs..."
                             value="{{ request('search') }}"
                             class="w-full px-4 py-2 bg-gray-800 text-white border border-gray-700 rounded-md focus:ring-2 focus:ring-blue-500">
@@ -33,13 +33,17 @@
                             class="px-4 py-2 {{ $activeFilter === 'full-time' ? 'bg-white text-black' : 'bg-black text-white' }} border border-white rounded-md text-sm hover:bg-white hover:text-black transition">
                             Full Time
                         </a>
-                        <a href="{{ route('dashboard', ['filter' => 'part-time']) }}"
-                            class="px-4 py-2 {{ $activeFilter === 'part-time' ? 'bg-white text-black' : 'bg-black text-white' }} border border-white rounded-md text-sm hover:bg-white hover:text-black transition">
-                            Part Time
-                        </a>
                         <a href="{{ route('dashboard', ['filter' => 'remote']) }}"
                             class="px-4 py-2 {{ $activeFilter === 'remote' ? 'bg-white text-black' : 'bg-black text-white' }} border border-white rounded-md text-sm hover:bg-white hover:text-black transition">
                             Remote
+                        </a>
+                        <a href="{{ route('dashboard', ['filter' => 'hybrid']) }}"
+                            class="px-4 py-2 {{ $activeFilter === 'hybrid' ? 'bg-white text-black' : 'bg-black text-white' }} border border-white rounded-md text-sm hover:bg-white hover:text-black transition">
+                            Hybrid
+                        </a>
+                        <a href="{{ route('dashboard', ['filter' => 'contract']) }}"
+                            class="px-4 py-2 {{ $activeFilter === 'contract' ? 'bg-white text-black' : 'bg-black text-white' }} border border-white rounded-md text-sm hover:bg-white hover:text-black transition">
+                            Contract
                         </a>
                         @if($activeFilter)
                             <a href="{{ route('dashboard') }}"
