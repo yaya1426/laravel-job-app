@@ -47,23 +47,23 @@ class ResumeAnalysisService
 
             file_put_contents($tempFile, $pdfContent);
 
-            // Check if pdftotext is available in the system
+            // Locate the pdftotext binary and ensure it's executable
             $pdftotext_paths = ['/opt/homebrew/bin/pdftotext', '/usr/bin/pdftotext', '/usr/local/bin/pdftotext'];
-            $pdftotext_available = false;
+            $pdftotextPath = null;
 
             foreach ($pdftotext_paths as $path) {
-                if (file_exists($path)) {
-                    $pdftotext_available = true;
+                if (is_executable($path)) {
+                    $pdftotextPath = $path;
                     break;
                 }
             }
 
-            if (!$pdftotext_available) {
+            if (!$pdftotextPath) {
                 throw new \Exception("pdftotext utility is not installed. For macOS, run: brew install poppler. For Linux, run: sudo apt-get install poppler-utils");
             }
 
-            // Extract text from PDF
-            $text = (new Pdf())
+            // Extract text from PDF using the located pdftotext binary
+            $text = (new Pdf($pdftotextPath))
                 ->setPdf($tempFile)
                 ->text();
 
